@@ -73,3 +73,11 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+model Categorias {
+  id Int  @id @default(autoincrement())
+  nome String @db.VarChar(50)
+  descricao String @db.Text
+  ativo Boolean @default(true)
+  criado_em DateTime @default(now())
+}
