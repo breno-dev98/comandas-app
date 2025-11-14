@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📌 **README — Sistema de Comandas (WIP)**
 
-## Getting Started
+## 🧾 Sobre o Projeto
 
-First, run the development server:
+Este projeto é um **sistema de comandas para bares e restaurantes**, em desenvolvimento com foco em escalabilidade, segurança e boas práticas de arquitetura.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Atualmente, o sistema já possui:
+
+* Autenticação completa com **Auth.js (NextAuth v5)** usando estratégia **JWT**
+* Cadastro de usuário via backend (rota `/api/users`)
+* Tela de login funcional
+* Dashboard protegido via **middleware**
+* Logout com Server Actions
+* Banco de dados gerenciado pelo **Prisma ORM**
+* Criptografia de senhas com **bcryptjs**
+* Estrutura inicial de rotas e grupos de páginas (public / protected)
+
+O projeto está sendo construído em etapas e ainda está em desenvolvimento.
+
+---
+
+## 🚀 **Tecnologias Utilizadas**
+
+### **Frontend / Backend (Fullstack Next.js)**
+
+* **Next.js 15+ / App Router**
+* **React**
+* **ShadcnUI**
+* **TypeScript**
+* **Server Components + Server Actions**
+* **Middleware para autenticação**
+* **Auth.js (NextAuth v5)**
+
+### **Backend**
+
+* **Prisma ORM**
+* **PostgreSQL**
+* **bcryptjs**
+* **Validação com Zod**
+
+---
+
+## 📁 **Estrutura de Pastas (atual)**
+
+```
+src/
+ ├─ app/
+ │   ├─ (public)/
+ │   │   └─ auth/page.tsx        # Tela de login
+ │   ├─ (protected)/
+ │   │   └─ dashboard/page.tsx   # Dashboard do usuário (rota privada)
+ │   ├─ api/
+ │   │   ├─ users/
+ │   │   │   └─ route.ts         # Cadastro de usuários
+ │   │   ├─ categorias/
+ │   │   │   └─ route.ts         # CRUD (inicial) de categorias
+ │   │   └─ auth/
+ │   │       └─ [...nextauth]/route.ts # Rotas internas do Auth.js
+ ├─ lib/
+ │   ├─ auth.ts                  # Configuração do Auth.js
+ │   └─ prisma.ts                # Instância do Prisma
+ ├─ utils/
+ │   └─ bcryptHelper.ts          # Criptografia de senhas
+ ├─ validators/
+ │   └─ loginSchema.ts           # Validação do formulário de login
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 **Autenticação e Segurança**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O projeto usa:
 
-## Learn More
+### ✔ **Auth.js com JWT**
 
-To learn more about Next.js, take a look at the following resources:
+* Não utiliza banco de dados de sessões
+* Tokens são verificados via middleware antes do acesso às rotas protegidas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### ✔ **Middleware**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Controla o acesso às rotas em `/protected/*`:
 
-## Deploy on Vercel
+* Usuários sem token → redirecionados para `/auth`
+* Usuários autenticados → acesso liberado
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### ✔ **bcryptjs para hashing**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Senhas são salvas **criptografadas** com salt aleatório.
+
+---
+
+## 📌 **Rotas Existentes**
+
+### **API**
+
+| Rota              | Método              | Descrição                                |
+| ----------------- | ------------------- | ---------------------------------------- |
+| `/api/users`      | GET/POST                | Criação de usuário (senha criptografada) |
+| `/api/categorias` | GET/POST/PUT/DELETE | CRUD inicial de categorias               |
+| `/api/auth/*`     | Auth.js             | Login e gerenciamento de sessão          |
+
+---
+
+## 🖥️ **Páginas**
+
+### **Public**
+
+* **/auth** — Tela de login com validação e integração Auth.js
+
+### **Protected**
+
+* **/(protected)/dashboard** — Exibe:
+
+  * Nome do usuário autenticado
+  * Role do usuário
+  * Botão de logout
+
+Todas as rotas protegidas utilizam middleware + `auth()` como reforço.
+
+---
+
+## 🛠️ **Status Atual do Projeto**
+
+### ✔ Já implementado:
+
+* Autenticação com Credenciais (Auth.js)
+* Middleware que protege áreas privadas
+* Dashboard básico autenticado
+* Logout via Server Action
+* Estrutura public/protected
+* Criptografia de senha
+* Prisma configurado
+* Rotas de Users e Categorias
+
+### 🔜 Em breve:
+
+* Autorização por roles (admin / gerente / atendente)
+* CRUD completo para comandas, mesas e itens
+* UI refinada para o dashboard
+* Testes (unitários e e2e)
+* Migrações automáticas com Prisma Migrate
+
+---
+
+## 📦 **Instalação e Execução**
+
+```bash
+git clone <seu-repo>
+cd <sua-pasta>
+
+pnpm install
+pnpm dev
+```
+
+Certifique-se de criar um `.env` com:
+
+```
+DATABASE_URL="sua-url-do-postgres"
+AUTH_SECRET="uma-chave-secreta-gerada"
+NEXTAUTH_SECRET="mesma-chave-ou-nova"
+```
+
+---
+
+## 📚 **Arquitetura em Andamento**
+
+A aplicação está sendo construída para seguir:
+
+* Clean Architecture simples
+* Próxima etapa: separar serviços, camada de domínio e validar roles
+
