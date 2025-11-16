@@ -1,32 +1,17 @@
 // app/protected/dashboard/page.tsx
-import { Button } from "@/components/ui/button";
-import { auth, signOut } from "@/lib/auth";
+import { DashboardGrid } from "@/components/dashboard/DashboardGrid";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { MesaGrid } from "@/components/mesas/MesaGrid";
 
 export default async function DashboardPage() {
-  const session = await auth();
 
   return (
-    <div className="p-8">
-      <header className="flex justify-between">
-        <div>
-          <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-          <p>Bem-vindo ao painel, {session?.user.name}!</p>
-          <p className="text-sm text-gray-500">Função: {session?.user.role}</p>
-        </div>
-        <form
-          action={async () => {
-            "use server";
-            await signOut({
-              redirect: true,
-              redirectTo: "/auth"
-            });
-          }}
-        >
-          <Button className="cursor-pointer" variant={"outline"} type="submit">
-            Desconectar
-          </Button>
-        </form>
-      </header>
+    <div>
+      <DashboardHeader />
+      <div className="px-4 space-y-8">
+        <DashboardGrid />
+        <MesaGrid />
+      </div>
     </div>
   );
 }
